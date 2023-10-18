@@ -1,6 +1,6 @@
 defmodule AtomicWrites.AtomicFile do
   @moduledoc """
-  Serializes the atomic writes to a file.
+  Performs serialized atomic file writes.
   """
   use GenServer
 
