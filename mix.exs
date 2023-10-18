@@ -42,7 +42,7 @@ defmodule AtomicWrites.MixProject do
 
   defp description do
     """
-    Serialized, atomic file writes in Elixir.
+    LWW, FWW & serialized atomic file writes in Elixir.
     """
   end
 
