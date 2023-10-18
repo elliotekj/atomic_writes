@@ -36,7 +36,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:atomic_writes, "~> 1.0.0"}
+    {:atomic_writes, "~> 1.1"}
   ]
 end
 ```
