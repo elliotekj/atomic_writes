@@ -45,4 +45,10 @@ defmodule AtomicWrites do
   - Blog: [https://elliotekj.com](https://elliotekj.com)
   - Email: elliot@elliotekj.com
   """
+  @doc false
+  def expand_opts(opts) do
+    opts
+    |> Keyword.put(:tmp_dir, Path.expand(opts[:tmp_dir]))
+    |> Keyword.put(:path, Path.expand(opts[:path]))
+  end
 end

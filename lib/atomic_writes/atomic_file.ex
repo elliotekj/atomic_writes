@@ -32,7 +32,7 @@ defmodule AtomicWrites.AtomicFile do
 
   def init(opts) do
     case NimbleOptions.validate(opts, @opts_schema) do
-      {:ok, config} -> {:ok, config}
+      {:ok, opts} -> {:ok, AtomicWrites.expand_opts(opts)}
       {:error, %NimbleOptions.ValidationError{} = error} -> {:stop, Exception.message(error)}
     end
   end
@@ -46,16 +46,14 @@ defmodule AtomicWrites.AtomicFile do
   end
 
   def handle_call({:write, content}, _from, config) do
-    tmp_dir_path = config[:tmp_dir] |> Path.expand() |> Path.dirname()
     tmp_filename = UUID.uuid4() <> ".atomicwrite"
-    tmp_file_path = Path.join([tmp_dir_path, tmp_filename])
-    dest_file_path = Path.expand(config[:path])
-    dest_dir_path = Path.dirname(dest_file_path)
+    tmp_file_path = Path.join([config[:tmp_dir], tmp_filename])
+    dest_dir_path = Path.dirname(config[:path])
 
-    with :ok <- File.mkdir_p(tmp_dir_path),
+    with :ok <- File.mkdir_p(config[:tmp_dir]),
          :ok <- File.mkdir_p(dest_dir_path),
          :ok <- File.write(tmp_file_path, content) do
-      result = maybe_move_file(tmp_file_path, dest_file_path, config[:overwrite?])
+      result = maybe_move_file(tmp_file_path, config[:path], config[:overwrite?])
       Process.send(self(), {:remove, tmp_file_path}, [])
       {:reply, result, config}
     else
