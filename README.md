@@ -1,18 +1,31 @@
-# AtomicWrites: Serialized, Atomic File Writes in Elixir
+# AtomicWrites: LWW, FWW & Serialized Atomic File Writes in Elixir
 
-Perform serialized and atomic file writes in Elixir with **AtomicWrites**. The
-basic idea is that writes are made to a temporary file and then moved when the
-write is complete. By default, the temporary write is made to the same file
-system (so that the move is also atomic) and the move will overwrite any
-existing file. Both of these options are configurable.
+Perform last-write-wins, first-write-wins or serialized atomic file writes in
+Elixir with **AtomicWrites**. The basic idea is that writes are made to a
+temporary file and then moved when the write is complete. By default, the
+temporary write is made to the same file system (so that the move is also
+atomic) and the move will overwrite any existing file (LWW). Both of these
+options are configurable.
 
-## Example
+## LWW Atomic Writes
+
+```elixir
+AtomicWrites.write("Atomically written content.", path: "example.txt")
+```
+
+## FWW Atomic Writes
+
+```elixir
+AtomicWrites.write("Atomically written content.", path: "example.txt", overwrite?: false)
+```
+
+## Serialized Atomic Writes
 
 ``` elixir
 alias AtomicWrites.AtomicFile
 
-{:ok, pid} = AtomicFile.start_link([path: "example.txt"])
-AtomicFile.write(pid, "Atomically written content.")
+{:ok, pid} = AtomicFile.start_link(path: "example.txt")
+AtomicFile.write(pid, "Serialized, atomically written content.")
 ```
 
 ## Installation
