@@ -14,7 +14,7 @@ defmodule AtomicWrites.AtomicFileTest do
   end
 
   describe "write/1" do
-    test "writes data to the path atomically", %{pid: pid} do
+    test "writes data to the path", %{pid: pid} do
       content = "Test string."
       :ok = AtomicFile.write(pid, content)
 
